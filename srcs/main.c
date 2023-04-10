@@ -1,40 +1,44 @@
 #include "ft_nm.h"
 
-void nm(char *ptr)
+static int process_file(char *path)
 {
-	(void)ptr;
+	int fd;
+	struct stat s;
+	char *ptr;
+	int ret;
+
+	fd = open(path, O_RDONLY);
+	if (fd < 0) {
+		return print_error(strerror(errno), path);
+	}
+	if (fstat(fd, &s) < 0) {
+		close(fd);
+		return print_error(strerror(errno), "fstat");
+	}
+	ptr = mmap(0, s.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+	if (ptr == MAP_FAILED) {
+		close(fd);
+		return print_error(strerror(errno), "mmap");
+	}
+	ret = nm(ptr, path);
+	if (munmap(ptr, s.st_size) < 0) {
+		close(fd);
+		return print_error(strerror(errno), "munmap");
+	}
+	close(fd);
+	return ret;
 }
 
 int main(int argc, char **argv)
 {
-	int fd;
-	struct stat statbuf;
-	char *ptr;
-	
+	int ret;
+
 	if (argc < 2) {
-		fprintf(stderr, "Need argument\n");
-		return EXIT_FAILURE;
+		return process_file(DEFAULT_FILE_PATH);
 	}
-	if ((fd = open(argv[1], O_RDONLY)) < 0) {
-		perror("open");
-		return EXIT_FAILURE;
+	ret = 0;
+	for (int i = 1; i < argc; ++i) {
+		ret += process_file(argv[i]);
 	}
-	if (fstat(fd, &statbuf) < 0) {
-		perror("fstat");
-		close(fd);
-		return EXIT_FAILURE;
-	}
-	if ((ptr = mmap(0, statbuf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED) {
-		perror("mmap");
-		close(fd);
-		return EXIT_FAILURE;
-	}
-	nm(ptr);
-	if (munmap(ptr, statbuf.st_size) < 0)
-	{
-		perror("munmap");
-		close(fd);
-		return EXIT_FAILURE;
-	}
-	return EXIT_SUCCESS;
+	return ret;
 }

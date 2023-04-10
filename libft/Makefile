@@ -1,30 +1,32 @@
-NAME		= nm
+NAME		= libft.a
 
 CC		= gcc
+AR		= ar rc
 RM		= rm -f
 
-_SRCS		= main.c nm.c errors.c
+_SRCS		= ft_strlen.c ft_strlcat.c ft_strlcopy.c ft_strjoin.c \
+		  ft_substr.c ft_strdup.c ft_strcmp.c ft_putchar_fd.c \
+		  ft_putstr_fd.c
 
 SRCS		= $(addprefix srcs/, $(_SRCS))
 OBJS		= $(SRCS:.c=.o)
-DEPS		= $(SRCS:.c=.d)
 
 CFLAGS		= -Wall -Wextra -Werror
+DEPS		= $(SRCS:.c=.d)
 
 all:		$(NAME)
 
 %.o : %.c
-		$(CC) $(CFLAGS) -I. -Ilibft -c $< -o $@
+		$(CC) $(CFLAGS) -I. -c $< -o $@
 
 %.d: %.c
 		@set -e; $(RM) $@; \
-		$(CC) -M $(CFLAGS) -I. -Ilibft $< > $@.$$$$; \
+		$(CC) -M $(CFLAGS) -I. $< > $@.$$$$; \
 		sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 		$(RM) $@.$$$$
 
 $(NAME):	$(OBJS)
-		make -C libft
-		$(CC) $(OBJS) -o $(NAME) -Llibft -lft
+		$(AR) $(NAME) $(OBJS)
 
 clean:
 		$(RM) $(OBJS) $(DEPS)
