@@ -13,17 +13,21 @@
 #define DEFAULT_FILE_PATH "a.out"
 
 struct s_symbol {
-	char *name;
-	uint64_t value;
+	char *st_name;
+	uint16_t st_bind;
+	uint16_t st_type;
+	uint32_t st_value;
+	uint32_t sh_type;
+	char *sh_name;
 };
 
-struct s_symbol_type_ref {
+struct s_sym_type_ref {
 	int32_t st_bind;
 	int32_t st_type;
-	__int128_t st_value;
-	__int128_t sh_type;
+	__int128 st_value;
+	__int128 sh_type;
 	char *sh_name;
-	char symbol;
+	char letter;
 };
 
 int nm(const char *ptr, char *path);

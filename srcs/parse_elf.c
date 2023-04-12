@@ -1,7 +1,7 @@
 #include "ft_nm.h"
 
 #define GEN_FIND_SECTION_TYPE(__BITS)                                   \
-	const Elf##__BITS##_Shdr *find_section_type_##__BITS(           \
+	static const Elf##__BITS##_Shdr *find_section_type_##__BITS(    \
 		const Elf##__BITS##_Shdr *shdrtab, size_t shdrtab_size, \
 		uint32_t sh_type)                                       \
 	{                                                               \
@@ -14,14 +14,16 @@
 GEN_FIND_SECTION_TYPE(32)
 GEN_FIND_SECTION_TYPE(64)
 
-#define GEN_PARSE_SYM(__BITS)                                            \
-	struct s_symbol parse_sym_##__BITS(const Elf##__BITS##_Sym *sym, \
-					   const char *strtab) {         \
-		struct s_symbol symbol;                                  \
-		(void)sym;                                               \
-		symbol.name = ft_strdup(&strtab[sym->st_name]);          \
-		symbol.value = sym->st_value;                            \
-		return symbol;                                           \
+#define GEN_PARSE_SYM(__BITS)                                         \
+	static struct s_symbol parse_sym_##__BITS(                    \
+		const Elf##__BITS##_Sym *sym, const char *strtab) {   \
+		struct s_symbol symbol;                               \
+                                                                      \
+		symbol.st_name = ft_strdup(&strtab[sym->st_name]);    \
+		symbol.st_bind = ELF##__BITS##_ST_BIND(sym->st_info); \
+		symbol.st_type = ELF##__BITS##_ST_TYPE(sym->st_info); \
+		symbol.st_value = sym->st_value;                      \
+		return symbol;                                        \
 	}
 
 GEN_PARSE_SYM(32)
@@ -54,7 +56,8 @@ GEN_PARSE_SYM(64)
                                                                               \
 		for (size_t i = 0; i < symtab_size; ++i) {                    \
 			sym = parse_sym_##__BITS(&symtab[i], strtab);         \
-			printf("%016lx %s\n", sym.value, sym.name);           \
+			printf("%016x, %s, %d, %d\n", sym.st_value,           \
+			       sym.st_name, sym.st_bind, sym.st_type);        \
 		}                                                             \
 	}
 
