@@ -15,5 +15,6 @@ char *ft_strdup(const char *s1);
 int ft_strcmp(const char *s1, const char *s2);
 void ft_putchar_fd(char c, int fd);
 void ft_putstr_fd(const char *s, int fd);
+char *ft_strappend(char *dest, char const *src);
 
 #endif // LIBFT_H

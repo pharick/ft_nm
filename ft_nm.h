@@ -12,6 +12,11 @@
 
 #define DEFAULT_FILE_PATH "a.out"
 
+struct s_symbol {
+	char *name;
+	uint64_t value;
+};
+
 struct s_symbol_type_ref {
 	int32_t st_bind;
 	int32_t st_type;
@@ -21,9 +26,8 @@ struct s_symbol_type_ref {
 	char symbol;
 };
 
-#define GET_SHDRTAB_64(PTR, EHDR) (Elf64_Shdr *)(&PTR[EHDR->e_shoff])
-
-int nm(char *ptr, char *path);
+int nm(const char *ptr, char *path);
+void parse_64(const char *ptr);
 
 int print_error(const char *s, const char *prefix);
 
