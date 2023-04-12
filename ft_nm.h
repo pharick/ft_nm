@@ -27,6 +27,7 @@ struct s_symbol_type_ref {
 };
 
 int nm(const char *ptr, char *path);
+void parse_32(const char *ptr);
 void parse_64(const char *ptr);
 
 int print_error(const char *s, const char *prefix);
