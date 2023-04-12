@@ -14,16 +14,26 @@
 GEN_FIND_SECTION_TYPE(32)
 GEN_FIND_SECTION_TYPE(64)
 
-#define GEN_PARSE_SYM(__BITS)                                         \
-	static struct s_symbol parse_sym_##__BITS(                    \
-		const Elf##__BITS##_Sym *sym, const char *strtab) {   \
-		struct s_symbol symbol;                               \
-                                                                      \
-		symbol.st_name = ft_strdup(&strtab[sym->st_name]);    \
-		symbol.st_bind = ELF##__BITS##_ST_BIND(sym->st_info); \
-		symbol.st_type = ELF##__BITS##_ST_TYPE(sym->st_info); \
-		symbol.st_value = sym->st_value;                      \
-		return symbol;                                        \
+#define GEN_PARSE_SYM(__BITS)                                                 \
+	static struct s_symbol parse_sym_##__BITS(                            \
+		const Elf##__BITS##_Sym *sym, const char *strtab,             \
+		const Elf##__BITS##_Shdr *shdrtab, const char *shstrtab) {    \
+		struct s_symbol symbol;                                       \
+                                                                              \
+		symbol.st_name = ft_strdup(&strtab[sym->st_name]);            \
+		symbol.st_bind = ELF##__BITS##_ST_BIND(sym->st_info);         \
+		symbol.st_type = ELF##__BITS##_ST_TYPE(sym->st_info);         \
+		symbol.st_value = sym->st_value;                              \
+		if (sym->st_shndx != SHN_ABS) {                               \
+			const Elf##__BITS##_Shdr *shdr =                      \
+				&shdrtab[sym->st_shndx];                      \
+			symbol.sh_type = shdr->sh_type;                       \
+			symbol.sh_name = ft_strdup(&shstrtab[shdr->sh_name]); \
+		} else {                                                      \
+			symbol.sh_type = SHT_NULL;                            \
+			symbol.sh_name = NULL;                                \
+		}                                                             \
+		return symbol;                                                \
 	}
 
 GEN_PARSE_SYM(32)
@@ -40,6 +50,8 @@ GEN_PARSE_SYM(64)
 		size_t symtab_size;                                           \
 		const Elf##__BITS##_Shdr *strtab_shdr;                        \
 		const char *strtab;                                           \
+		const Elf##__BITS##_Shdr *shstrtab_shdr;                      \
+		const char *shstrtab;                                         \
 		struct s_symbol sym;                                          \
                                                                               \
 		ehdr = (Elf##__BITS##_Ehdr *)ptr;                             \
@@ -54,10 +66,15 @@ GEN_PARSE_SYM(64)
 		strtab_shdr = &shdrtab[symtab_shdr->sh_link];                 \
 		strtab = &ptr[strtab_shdr->sh_offset];                        \
                                                                               \
+		shstrtab_shdr = &shdrtab[ehdr->e_shstrndx];                   \
+		shstrtab = &ptr[shstrtab_shdr->sh_offset];                    \
+                                                                              \
 		for (size_t i = 0; i < symtab_size; ++i) {                    \
-			sym = parse_sym_##__BITS(&symtab[i], strtab);         \
-			printf("%016x, %s, %d, %d\n", sym.st_value,           \
-			       sym.st_name, sym.st_bind, sym.st_type);        \
+			sym = parse_sym_##__BITS(&symtab[i], strtab, shdrtab, \
+						 shstrtab);                   \
+			printf("%016x, %s, %d, %d, %x\n", sym.st_value,       \
+			       sym.st_name, sym.st_bind, sym.st_type,         \
+			       sym.sh_type);                                  \
 		}                                                             \
 	}
 
