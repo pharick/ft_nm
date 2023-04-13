@@ -6,7 +6,8 @@ RM		= rm -f
 
 _SRCS		= ft_strlen.c ft_strlcat.c ft_strlcopy.c ft_strjoin.c \
 		  ft_substr.c ft_strdup.c ft_strcmp.c ft_putchar_fd.c \
-		  ft_putstr_fd.c ft_strappend.c
+		  ft_putstr_fd.c ft_strappend.c ft_lstnew.c ft_lstadd_front.c \
+		  ft_lstiter.c
 
 SRCS		= $(addprefix srcs/, $(_SRCS))
 OBJS		= $(SRCS:.c=.o)

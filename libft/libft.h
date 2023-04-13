@@ -6,6 +6,11 @@
 #include <errno.h>
 #include <unistd.h>
 
+typedef struct s_list {
+	void *content;
+	struct s_list *next;
+} t_list;
+
 size_t ft_strlen(const char *s);
 size_t ft_strlcpy(char *dst, const char *src, size_t dstsize);
 size_t ft_strlcat(char *dst, const char *src, size_t dstsize);
@@ -16,5 +21,8 @@ int ft_strcmp(const char *s1, const char *s2);
 void ft_putchar_fd(char c, int fd);
 void ft_putstr_fd(const char *s, int fd);
 char *ft_strappend(char *dest, char const *src);
+t_list *ft_lstnew(void *content);
+void ft_lstadd_front(t_list **lst, t_list *new);
+void ft_lstiter(t_list *lst, void (*f)(void *));
 
 #endif // LIBFT_H

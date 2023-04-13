@@ -31,8 +31,8 @@ struct s_sym_type_ref {
 };
 
 int nm(const char *ptr, char *path);
-void parse_32(const char *ptr);
-void parse_64(const char *ptr);
+t_list *parse_32(const char *ptr);
+t_list *parse_64(const char *ptr);
 
 int print_error(const char *s, const char *prefix);
 
