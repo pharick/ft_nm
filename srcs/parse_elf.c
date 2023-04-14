@@ -33,6 +33,7 @@ GEN_FIND_SECTION_TYPE(64)
 		symbol->st_bind = ELF##__BITS##_ST_BIND(sym->st_info);         \
 		symbol->st_type = ELF##__BITS##_ST_TYPE(sym->st_info);         \
 		symbol->st_value = sym->st_value;                              \
+		symbol->ei_class = __BITS == 32 ? 1 : 2;                       \
 		if (sym->st_shndx != SHN_ABS) {                                \
 			const Elf##__BITS##_Shdr *shdr =                       \
 				&shdrtab[sym->st_shndx];                       \
@@ -40,7 +41,7 @@ GEN_FIND_SECTION_TYPE(64)
 			symbol->sh_name = ft_strdup(&shstrtab[shdr->sh_name]); \
 		} else {                                                       \
 			symbol->sh_type = SHT_NULL;                            \
-			symbol->sh_name = NULL;                                \
+			symbol->sh_name = ft_strdup("");                       \
 		}                                                              \
 		return symbol;                                                 \
 	}

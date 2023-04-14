@@ -2,7 +2,9 @@
 
 void print_sym(struct s_symbol *sym)
 {
-	printf("%x %s\n", sym->st_value, sym->st_name);
+	printf("%s\n", sym->sh_name);
+	printf("%0*x %c %s\n", sym->ei_class == ELFCLASS32 ? 8 : 16,
+	       sym->st_value, get_sym_type(sym), sym->st_name);
 }
 
 int nm(const char *ptr, char *path)
@@ -15,9 +17,9 @@ int nm(const char *ptr, char *path)
 	if (ft_strcmp(ei_mag, ELFMAG))
 		return print_error("File format not recognized", path);
 	ei_class = ptr[4];
-	if (ei_class == 1)
+	if (ei_class == ELFCLASS32)
 		sym_list = parse_32(ptr);
-	else if (ei_class == 2)
+	else if (ei_class == ELFCLASS64)
 		sym_list = parse_64(ptr);
 	else
 		return print_error("Wrong ei_class", NULL);

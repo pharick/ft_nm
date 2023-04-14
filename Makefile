@@ -3,7 +3,7 @@ NAME		= nm
 CC		= gcc
 RM		= rm -f
 
-_SRCS		= main.c nm.c parse_elf.c errors.c
+_SRCS		= main.c nm.c parse_elf.c symbol_type.c errors.c
 
 SRCS		= $(addprefix srcs/, $(_SRCS))
 OBJS		= $(SRCS:.c=.o)
