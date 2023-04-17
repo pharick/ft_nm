@@ -29,19 +29,22 @@ GEN_FIND_SECTION_TYPE(64)
 		struct s_symbol *symbol;                                       \
                                                                                \
 		symbol = (struct s_symbol *)malloc(sizeof(struct s_symbol));   \
+		symbol->ei_class = __BITS == 32 ? 1 : 2;                       \
 		symbol->st_name = ft_strdup(&strtab[sym->st_name]);            \
 		symbol->st_bind = ELF##__BITS##_ST_BIND(sym->st_info);         \
 		symbol->st_type = ELF##__BITS##_ST_TYPE(sym->st_info);         \
 		symbol->st_value = sym->st_value;                              \
-		symbol->ei_class = __BITS == 32 ? 1 : 2;                       \
+		symbol->st_shndx = sym->st_shndx;                              \
 		if (sym->st_shndx != SHN_ABS) {                                \
 			const Elf##__BITS##_Shdr *shdr =                       \
 				&shdrtab[sym->st_shndx];                       \
 			symbol->sh_type = shdr->sh_type;                       \
 			symbol->sh_name = ft_strdup(&shstrtab[shdr->sh_name]); \
+			symbol->sh_flags = shdr->sh_flags;                     \
 		} else {                                                       \
 			symbol->sh_type = SHT_NULL;                            \
 			symbol->sh_name = ft_strdup("");                       \
+			symbol->sh_flags = 0;                                  \
 		}                                                              \
 		return symbol;                                                 \
 	}
@@ -62,7 +65,8 @@ GEN_PARSE_SYM(64)
 		for (size_t i = 0; i < symtab_size; ++i) {                    \
 			sym = parse_sym_##__BITS(&symtab[i], strtab, shdrtab, \
 						 shstrtab);                   \
-			if (sym->st_name[0] != '\0')                          \
+			if (sym->st_name[0] != '\0' &&                        \
+			    sym->st_shndx != SHN_ABS)                         \
 				ft_lstadd_front(&list, ft_lstnew(sym));       \
 			else                                                  \
 				free_symbol(sym);                             \

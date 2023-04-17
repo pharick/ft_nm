@@ -2,7 +2,8 @@
 
 void print_sym(struct s_symbol *sym)
 {
-	printf("%s\n", sym->sh_name);
+	printf("%x --- %s %lu\n", sym->st_shndx, sym->sh_name,
+	       sym->sh_flags & SHF_WRITE);
 	printf("%0*x %c %s\n", sym->ei_class == ELFCLASS32 ? 8 : 16,
 	       sym->st_value, get_sym_type(sym), sym->st_name);
 }

@@ -17,7 +17,9 @@ struct s_symbol {
 	uint16_t st_bind;
 	uint16_t st_type;
 	uint32_t st_value;
+	uint16_t st_shndx;
 	uint32_t sh_type;
+	uint64_t sh_flags;
 	char *sh_name;
 	int ei_class;
 };
@@ -26,6 +28,7 @@ struct s_sym_type_ref {
 	int32_t st_bind;
 	int32_t st_type;
 	__int128 st_value;
+	int32_t st_shndx;
 	__int128 sh_type;
 	char *sh_name;
 	char letter;
