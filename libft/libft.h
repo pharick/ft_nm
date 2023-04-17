@@ -29,5 +29,9 @@ void ft_putnbr_hex_fd(long long n, size_t width, int fd);
 size_t ft_lstsize(t_list *lst);
 void ft_strlower(char *str);
 void ft_putchar_width_fd(char c, size_t width, int fd);
+char *ft_strchr(const char *s, int c);
+size_t ft_strlcpy_ex(char *dst, const char *src, size_t dstsize, char *ignore,
+		     int lowercase);
+char *ft_strdup_ex(const char *s1, char *ignore, int lowercase);
 
 #endif // LIBFT_H

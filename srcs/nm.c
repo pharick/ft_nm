@@ -2,9 +2,12 @@
 
 static void print_sym(struct s_symbol *sym)
 {
+	char type;
+
 	// printf("%x --- %s %lu\n", sym->st_shndx, sym->sh_name,
 	//        sym->sh_flags & SHF_WRITE);
-	if (sym->st_value != 0)
+	type = get_sym_type(sym);
+	if (type != 'u' && type != 'U' && type != 'w')
 		ft_putnbr_hex_fd(sym->st_value,
 				 sym->ei_class == ELFCLASS32 ? 8 : 16, 1);
 	else
@@ -23,14 +26,8 @@ static int sym_name_comp(char *n1, char *n2)
 	char *n2_low;
 	int res;
 
-	while (*n1 == '_')
-		++n1;
-	while (*n2 == '_')
-		++n2;
-	n1_low = ft_strdup(n1);
-	n2_low = ft_strdup(n2);
-	ft_strlower(n1_low);
-	ft_strlower(n2_low);
+	n1_low = ft_strdup_ex(n1, "_", 1);
+	n2_low = ft_strdup_ex(n2, "_", 1);
 	res = ft_strcmp(n1_low, n2_low);
 	free(n1_low);
 	free(n2_low);
@@ -40,18 +37,23 @@ static int sym_name_comp(char *n1, char *n2)
 static void sort_sym_list(t_list *sym_list)
 {
 	t_list *current;
-	void *tmp;
+	struct s_symbol *curr_symb;
+	struct s_symbol *next_symb;
 	size_t size;
+	int name_cmp;
+	int value_cmp;
+	void *tmp;
 
 	size = ft_lstsize(sym_list);
 	for (size_t i = 0; i < size - 1; ++i) {
 		current = sym_list;
 		for (size_t j = 0; j < size - i - 1; ++j) {
-			if (sym_name_comp(
-				    ((struct s_symbol *)current->content)
-					    ->st_name,
-				    ((struct s_symbol *)current->next->content)
-					    ->st_name) > 0) {
+			curr_symb = (struct s_symbol *)current->content;
+			next_symb = (struct s_symbol *)current->next->content;
+			name_cmp = sym_name_comp(curr_symb->st_name,
+						 next_symb->st_name);
+			value_cmp = curr_symb->st_value - next_symb->st_value;
+			if (name_cmp > 0 || (name_cmp == 0 && value_cmp > 0)) {
 				tmp = current->content;
 				current->content = current->next->content;
 				current->next->content = tmp;

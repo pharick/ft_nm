@@ -4,8 +4,8 @@ static struct s_sym_type_ref symbol_type_ref[] = {
 	{
 		.st_bind = STB_WEAK,
 		.st_type = STT_OBJECT,
-		.st_value = 0,
-		.st_shndx = -1,
+		.st_value = -1,
+		.st_shndx = SHN_UNDEF,
 		.sh_type = -1,
 		.sh_flags = -1,
 		.sh_flags_not = -1,
@@ -26,8 +26,8 @@ static struct s_sym_type_ref symbol_type_ref[] = {
 	{
 		.st_bind = STB_WEAK,
 		.st_type = -1,
-		.st_shndx = -1,
-		.st_value = 0,
+		.st_shndx = SHN_UNDEF,
+		.st_value = -1,
 		.sh_type = -1,
 		.sh_flags = -1,
 		.sh_flags_not = -1,
@@ -309,5 +309,5 @@ char get_sym_type(struct s_symbol *sym)
 		     ft_strcmp(ref.sh_name, sym->sh_name) == 0))
 			return ref.letter;
 	}
-	return ' ';
+	return '?';
 }
