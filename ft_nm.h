@@ -30,6 +30,8 @@ struct s_sym_type_ref {
 	__int128 st_value;
 	int32_t st_shndx;
 	__int128 sh_type;
+	__int128 sh_flags;
+	__int128 sh_flags_not;
 	char *sh_name;
 	char letter;
 };
