@@ -4,8 +4,12 @@ static void print_sym(struct s_symbol *sym)
 {
 	// printf("%x --- %s %lu\n", sym->st_shndx, sym->sh_name,
 	//        sym->sh_flags & SHF_WRITE);
-	ft_putnbr_hex_fd(sym->st_value, 1,
-			 sym->ei_class == ELFCLASS32 ? 8 : 16);
+	if (sym->st_value != 0)
+		ft_putnbr_hex_fd(sym->st_value,
+				 sym->ei_class == ELFCLASS32 ? 8 : 16, 1);
+	else
+		ft_putchar_width_fd(' ', sym->ei_class == ELFCLASS32 ? 8 : 16,
+				    1);
 	ft_putchar_fd(' ', 1);
 	ft_putchar_fd(get_sym_type(sym), 1);
 	ft_putchar_fd(' ', 1);
