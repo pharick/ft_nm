@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <unistd.h>
+#include <limits.h>
 
 typedef struct s_list {
 	void *content;
@@ -24,5 +25,8 @@ char *ft_strappend(char *dest, char const *src);
 t_list *ft_lstnew(void *content);
 void ft_lstadd_front(t_list **lst, t_list *new);
 void ft_lstiter(t_list *lst, void (*f)(void *));
+void ft_putnbr_hex_fd(long long n, int fd, size_t width);
+size_t ft_lstsize(t_list *lst);
+void ft_strlower(char *str);
 
 #endif // LIBFT_H
