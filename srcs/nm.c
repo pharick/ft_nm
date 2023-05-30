@@ -44,6 +44,8 @@ static void sort_sym_list(t_list *sym_list)
 	void *tmp;
 
 	size = ft_lstsize(sym_list);
+	if (size <= 0)
+		return;
 	for (size_t i = 0; i < size - 1; ++i) {
 		current = sym_list;
 		for (size_t j = 0; j < size - i - 1; ++j) {
