@@ -5,7 +5,6 @@ static void print_sym(struct s_symbol *sym)
 	char type;
 
 	type = get_sym_type(sym);
-	// printf("%s\n", sym->sh_name);
 	if (type != 'u' && type != 'U' && type != 'w')
 		ft_putnbr_hex_fd(sym->st_value,
 				 sym->ei_class == ELFCLASS32 ? 8 : 16, 1);
@@ -25,8 +24,8 @@ static int sym_name_comp(char *n1, char *n2)
 	char *n2_low;
 	int res;
 
-	n1_low = ft_strdup_ex(n1, "_", 1);
-	n2_low = ft_strdup_ex(n2, "_", 1);
+	n1_low = ft_strdup_ex(n1, "_@.", 1);
+	n2_low = ft_strdup_ex(n2, "_@.", 1);
 	res = ft_strcmp(n1_low, n2_low);
 	free(n1_low);
 	free(n2_low);
