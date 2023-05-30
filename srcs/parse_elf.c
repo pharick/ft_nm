@@ -97,6 +97,8 @@ GEN_GET_SYM_LIST(64)
 		shdrtab_size = ehdr->e_shnum;                                 \
 		symtab_shdr = find_section_type_##__BITS(                     \
 			shdrtab, shdrtab_size, SHT_SYMTAB);                   \
+		if (!symtab_shdr)                                             \
+			return NULL;                                          \
 		symtab = (Elf##__BITS##_Sym *)&ptr[symtab_shdr->sh_offset];   \
 		symtab_size = symtab_shdr->sh_size / symtab_shdr->sh_entsize; \
 		strtab_shdr = &shdrtab[symtab_shdr->sh_link];                 \

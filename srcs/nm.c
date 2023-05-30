@@ -78,6 +78,8 @@ int nm(const char *ptr, char *path)
 		sym_list = parse_64(ptr);
 	else
 		return print_error("Wrong ei_class", NULL);
+	if (!sym_list)
+		return print_error("no symbols", path);
 	sort_sym_list(sym_list);
 	ft_lstiter(sym_list, (void (*)(void *))print_sym);
 	return 0;
