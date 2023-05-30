@@ -41,5 +41,6 @@ t_list *parse_32(const char *ptr);
 t_list *parse_64(const char *ptr);
 char get_sym_type(struct s_symbol *sym);
 int print_error(const char *s, const char *prefix);
+void free_sym_list(t_list *syms);
 
 #endif // FT_NM_H

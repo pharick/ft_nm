@@ -7,6 +7,18 @@ void free_symbol(struct s_symbol *sym)
 	free(sym);
 }
 
+void free_sym_list(t_list *syms)
+{
+	t_list *next;
+
+	while (syms != NULL) {
+		next = syms->next;
+		free_symbol(syms->content);
+		free(syms);
+		syms = next;
+	}
+}
+
 #define GEN_FIND_SECTION_TYPE(__BITS)                                   \
 	static const Elf##__BITS##_Shdr *find_section_type_##__BITS(    \
 		const Elf##__BITS##_Shdr *shdrtab, size_t shdrtab_size, \

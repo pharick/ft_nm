@@ -4,7 +4,6 @@ static void print_sym(struct s_symbol *sym)
 {
 	char type;
 
-	// printf("%x --- %s\n", sym->st_shndx, sym->sh_name);
 	type = get_sym_type(sym);
 	if (type != 'u' && type != 'U' && type != 'w')
 		ft_putnbr_hex_fd(sym->st_value,
@@ -70,17 +69,19 @@ int nm(const char *ptr, char *path)
 
 	ei_mag = ft_substr(ptr, 0, 4);
 	if (ft_strcmp(ei_mag, ELFMAG))
-		return print_error("File format not recognized", path);
+		return print_error("file format not recognized", path);
+	free(ei_mag);
 	ei_class = ptr[4];
 	if (ei_class == ELFCLASS32)
 		sym_list = parse_32(ptr);
 	else if (ei_class == ELFCLASS64)
 		sym_list = parse_64(ptr);
 	else
-		return print_error("Wrong ei_class", NULL);
+		return print_error("wrong ei_class", NULL);
 	if (!sym_list)
 		return print_error("no symbols", path);
 	sort_sym_list(sym_list);
 	ft_lstiter(sym_list, (void (*)(void *))print_sym);
+	free_sym_list(sym_list);
 	return 0;
 }
