@@ -4,8 +4,7 @@ static void print_sym(struct s_symbol *sym)
 {
 	char type;
 
-	// printf("%x --- %s %lu\n", sym->st_shndx, sym->sh_name,
-	//        sym->sh_flags & SHF_WRITE);
+	// printf("%x --- %s\n", sym->st_shndx, sym->sh_name);
 	type = get_sym_type(sym);
 	if (type != 'u' && type != 'U' && type != 'w')
 		ft_putnbr_hex_fd(sym->st_value,

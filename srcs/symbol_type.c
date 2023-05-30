@@ -266,6 +266,17 @@ static struct s_sym_type_ref symbol_type_ref[] = {
 		.letter = 'U',
 	},
 	{
+		.st_bind = -1,
+		.st_type = -1,
+		.st_value = -1,
+		.st_shndx = -1,
+		.sh_type = -1,
+		.sh_flags = -1,
+		.sh_flags_not = SHF_WRITE,
+		.sh_name = ".group",
+		.letter = 'n',
+	},
+	{
 		.st_bind = STB_LOCAL,
 		.st_type = -1,
 		.st_value = -1,
