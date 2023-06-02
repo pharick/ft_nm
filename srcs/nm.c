@@ -5,7 +5,6 @@ static void print_sym(struct s_symbol *sym)
 	char type;
 
 	type = get_sym_type(sym);
-	// printf("%s %d\n", sym->sh_name, sym->sh_type);
 	if (type != 'u' && type != 'U' && type != 'w')
 		ft_putnbr_hex_fd(sym->st_value,
 				 sym->ei_class == ELFCLASS32 ? 8 : 16, 1);

@@ -1,4 +1,4 @@
-/.vscode
+.vscode/
 **/*.o
 **/*.d
 **/*.a
@@ -7,3 +7,5 @@ test32
 test64
 my.txt
 system.txt
+tests/**_test_32
+tests/**_test_64
