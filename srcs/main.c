@@ -33,11 +33,15 @@ int main(int argc, char **argv)
 {
 	int ret;
 
-	if (argc < 2) {
+	if (argc < 2)
 		return process_file(DEFAULT_FILE_PATH);
-	}
+	if (argc == 2)
+		return process_file(argv[1]);
 	ret = 0;
 	for (int i = 1; i < argc; ++i) {
+		ft_putstr_fd("\n", 1);
+		ft_putstr_fd(argv[i], 1);
+		ft_putstr_fd(":\n", 1);
 		ret += process_file(argv[i]);
 	}
 	return ret;
