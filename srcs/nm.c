@@ -63,7 +63,7 @@ static void sort_sym_list(t_list *sym_list)
 	}
 }
 
-int nm(const char *ptr, char *path)
+int nm(const char *ptr, char *path, struct stat s)
 {
 	char *ei_mag;
 	int ei_class;
@@ -75,9 +75,9 @@ int nm(const char *ptr, char *path)
 	free(ei_mag);
 	ei_class = ptr[4];
 	if (ei_class == ELFCLASS32)
-		sym_list = parse_32(ptr);
+		sym_list = parse_32(ptr, path, s);
 	else if (ei_class == ELFCLASS64)
-		sym_list = parse_64(ptr);
+		sym_list = parse_64(ptr, path, s);
 	else
 		return print_error("wrong ei_class", NULL);
 	if (!sym_list)

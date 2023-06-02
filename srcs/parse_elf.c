@@ -90,7 +90,7 @@ GEN_GET_SYM_LIST(32)
 GEN_GET_SYM_LIST(64)
 
 #define GEN_PARSE(__BITS)                                                     \
-	t_list *parse_##__BITS(const char *ptr)                               \
+	t_list *parse_##__BITS(const char *ptr, char *path, struct stat s)    \
 	{                                                                     \
 		const Elf##__BITS##_Ehdr *ehdr;                               \
 		const Elf##__BITS##_Shdr *shdrtab;                            \
@@ -107,6 +107,12 @@ GEN_GET_SYM_LIST(64)
 		ehdr = (Elf##__BITS##_Ehdr *)ptr;                             \
 		shdrtab = (Elf##__BITS##_Shdr *)&ptr[ehdr->e_shoff];          \
 		shdrtab_size = ehdr->e_shnum;                                 \
+		if (ehdr->e_shoff > (long unsigned int)s.st_size ||           \
+		    ehdr->e_shoff + shdrtab_size * ehdr->e_shentsize >        \
+			    (long unsigned int)s.st_size) {                   \
+			print_error("file too short", path);                  \
+			return NULL;                                          \
+		}                                                             \
 		symtab_shdr = find_section_type_##__BITS(                     \
 			shdrtab, shdrtab_size, SHT_SYMTAB);                   \
 		if (!symtab_shdr)                                             \

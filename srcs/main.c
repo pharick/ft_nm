@@ -20,7 +20,7 @@ static int process_file(char *path)
 		close(fd);
 		return print_error(strerror(errno), "mmap");
 	}
-	ret = nm(ptr, path);
+	ret = nm(ptr, path, s);
 	if (munmap(ptr, s.st_size) < 0) {
 		close(fd);
 		return print_error(strerror(errno), "munmap");

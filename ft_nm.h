@@ -36,9 +36,9 @@ struct s_sym_type_ref {
 	char letter;
 };
 
-int nm(const char *ptr, char *path);
-t_list *parse_32(const char *ptr);
-t_list *parse_64(const char *ptr);
+int nm(const char *ptr, char *path, struct stat s);
+t_list *parse_32(const char *ptr, char *path, struct stat s);
+t_list *parse_64(const char *ptr, char *path, struct stat s);
 char get_sym_type(struct s_symbol *sym);
 int print_error(const char *s, const char *prefix);
 void free_sym_list(t_list *syms);
