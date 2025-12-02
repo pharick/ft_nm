@@ -9,3 +9,6 @@ my.txt
 system.txt
 tests/**_test_32
 tests/**_test_64
+tests/test_binary
+nm_sanitized
+*.log
